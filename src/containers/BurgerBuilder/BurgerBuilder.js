@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import Burger from '../../components/Burger/Burger'
 import BuildControls from '../../components/Burger/BuildControls/BuildControls'
+
+const INGREDIENT_PRICES = {
+    salad: 0.60,
+    bacon: 1.20,
+    cheese: .90,
+    meat: 2.40
+}
 class BurgerBuilder extends Component {
     state = {
         ingredients: {
@@ -8,13 +15,16 @@ class BurgerBuilder extends Component {
             bacon: 0,
             cheese: 0,
             meat: 0
-        }
+        },
+        totalPrice: 5.40
     }
 
     addIngredientHandler = (type) => {
         let currentIngredient = this.state.ingredients[type] + 1;
         let updatedIngredients = {...this.state.ingredients, [type]: currentIngredient}
-        this.setState({ingredients: updatedIngredients})
+        let currentPrice = this.state.totalPrice;
+        let updatedPrice = currentPrice + INGREDIENT_PRICES[type]
+        this.setState({ingredients: updatedIngredients, totalPrice: updatedPrice})
     }
 
     removeIngredientHandler = (type) => {
@@ -23,7 +33,9 @@ class BurgerBuilder extends Component {
             return;
         }
         let updatedIngredients = {...this.state.ingredients, [type]: currentIngredient}
-        this.setState({ingredients: updatedIngredients})
+        let currentPrice = this.state.totalPrice;
+        let updatedPrice = currentPrice - INGREDIENT_PRICES[type]
+        this.setState({ingredients: updatedIngredients, totalPrice: updatedPrice})
     }
 
 
@@ -41,6 +53,7 @@ class BurgerBuilder extends Component {
                     addIngredient={this.addIngredientHandler} 
                     removeIngredient={this.removeIngredientHandler}
                     disabled ={disabledInfo}
+                    price = {this.state.totalPrice}
                 />
             </React.Fragment>
         )
